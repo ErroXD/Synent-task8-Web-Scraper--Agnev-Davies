@@ -1,12 +1,12 @@
 import requests
-import time
+from bs4 import BeautifulSoup
 import csv
 import json
-from bs4 import BeautifulSoup
+import time
 
-BASE_URL = "https://www.books.toscrape.com/catalogue/"
+BASE_URL = "https://books.toscrape.com/catalogue/"
 
-START_URL = "https://www.books.toscrape.com/catalogue/page-1.html"
+START_URL = "https://books.toscrape.com/catalogue/page-1.html"
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/91.0.4472.124 Safari/537.36"
@@ -52,7 +52,8 @@ def save_to_json(books, filename="books.json"):
 def main():
     url = START_URL
     all_books = []
-    while url:
+    max_pages = 5
+    while url and len(all_books) < max_pages * 20:  # Assuming 20 books per page
         print(f"Scraping {url}...")
         books = get_book_data(url)
         all_books.extend(books)
